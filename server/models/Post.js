@@ -1,7 +1,11 @@
 const mongoose = require("mongoose");
 
 const commentSchema = new mongoose.Schema({
-  author: String,
+  author: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: "User",
+    required: true,
+  },
   content: String,
   date: String,
 }, { _id: true });  // ✅ 반드시 _id: true 설정 (또는 생략 — 기본값이 true)

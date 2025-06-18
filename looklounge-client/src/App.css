@@ -509,15 +509,31 @@ body, html, #root {
   gap: 1rem;
 }
 
-.edit-btn, .delete-btn {
-  padding: 0.6rem 1.2rem;
+/* ① 공통 스타일 : 둘 다 필요한 속성만 묶어요 */
+.edit-btn,
+.delete-btn {
   font-size: 0.95rem;
   border: none;
   border-radius: 6px;
   cursor: pointer;
-
   text-decoration: none;
 }
+
+/* ② delete-btn 전용 패딩 */
+.delete-btn {
+  padding: 0.6rem 1.2rem;
+  background-color: #e74c3c;
+  color: white;
+}
+
+/* ③ edit-btn 전용 패딩 (왼쪽만 살짝 줄임) */
+.edit-btn {
+  /* 상/하 0.6rem, 우 1.2rem, 좌 0.8rem */
+  padding: 0.6rem 1.2rem 0.6rem 0.8rem;
+  background-color: #444;
+  color: white;
+}
+
 
 .edit-btn {
   background-color: #444;
@@ -613,28 +629,38 @@ body, html, #root {
 
 
 .comment-action-btn {
-  padding: 6px 14px;
-  font-size: 0.9rem;
+  padding: 0.4rem 0.8rem;      /* .edit-btn/.delete-btn과 동일 */
+  font-size: 0.95rem;
   border: none;
-  border-radius: 20px;
+  border-radius: 6px;         /* pill이 아닌 살짝 둥글게 */
   cursor: pointer;
   font-weight: 500;
   transition: background-color 0.3s, transform 0.2s;
 }
+
+.comment-action-btn + .comment-action-btn {
+  margin-left: 0.5rem;  /* 두 버튼 사이 0.5rem 띄우기 */
+}
+
+/* 저장/수정, 삭제 각각 색상도 메인 버튼과 맞추려면: */
+.comment-action-btn.save {
+  background-color: #444;
+  color: white;
+}
+.comment-action-btn.delete {
+  background-color: #dc3545; /* 또는 메인 delete-btn 색상 */
+  color: white;
+}
+
+
 .comment-action-btn:hover {
   transform: scale(1.05);
 }
-.comment-action-btn.save {
-  background-color: #28a745;
-  color: white;
-}
+
 .comment-action-btn.save:hover {
   background-color: #218838;
 }
-.comment-action-btn.delete {
-  background-color: #dc3545;
-  color: white;
-}
+
 .comment-action-btn.delete:hover {
   background-color: #c82333;
 }

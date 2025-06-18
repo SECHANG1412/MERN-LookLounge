@@ -158,50 +158,89 @@ export default function PostDetailPage() {
         )}
 
         <hr className="post-divider" />
+
+        {/* src/pages/PostDetailPage.js */}
+        {/* … 위쪽 생략 … */}
+
         <div className="comments-section">
           <h3>💬 댓글</h3>
+
           {post.comments?.length > 0 ? (
-            post.comments.map((c) => (
-              <div key={c._id} className="comment">
-                {editIndex === c._id ? (
-                  <>
-                    <input
-                      value={editContent}
-                      onChange={(e) => setEditContent(e.target.value)}
-                      className="edit-comment-input"
-                    />
-                    <div style={{ display: "flex", gap: "0.5rem" }}>
-                      <button onClick={handleSaveEdit}>💾 저장</button>
-                      <button onClick={() => setEditIndex(null)}>
-                        ❌ 취소
-                      </button>
-                    </div>
-                  </>
-                ) : (
-                  <>
-                    <div
-                      className="comment-header"
-                      style={{ fontWeight: "bold", marginBottom: "0.25rem" }}
-                    >
-                      ✍️ <span style={{ color: "#333" }}>{c.author}</span> | 🗓 {c.date?.substring(0, 10)}
-                    </div>
-                    <p style={{ marginLeft: "1rem" }}>{c.content}</p>
-                    {/* 댓글 삭제 버튼 */}
-                    {currentUser === c.author && (
-                      <button
-                        onClick={() => handleDeleteComment(c._id)}
-                        className="comment-delete-btn"
+            post.comments.map((c) => {
+              // 작성자 이름
+              const commentAuthorName =
+                typeof c.author === "object" ? c.author.username : c.author;
+              // 권한 체크용 ID
+              const commentAuthorId =
+                typeof c.author === "object" ? c.author._id : c.author;
+              const isMine = commentAuthorId === currentUser;
+
+              return (
+                <div key={c._id} className="comment">
+                  {editIndex === c._id ? (
+                    // — 편집 모드 —
+                    <>
+                      <textarea
+                        className="edit-comment-input"
+                        value={editContent}
+                        onChange={(e) => setEditContent(e.target.value)}
+                      />
+                      <div className="comment-actions">
+                        <button
+                          type="button"
+                          className="comment-action-btn save"
+                          onClick={handleSaveEdit}
+                        >
+                          💾 저장
+                        </button>
+                        <button
+                          type="button"
+                          className="comment-action-btn cancel"
+                          onClick={() => setEditIndex(null)}
+                        >
+                          ❌ 취소
+                        </button>
+                      </div>
+                    </>
+                  ) : (
+                    // — 일반 모드 —
+                    <>
+                      <div
+                        className="comment-header"
+                        style={{ fontWeight: "bold", marginBottom: "0.25rem" }}
                       >
-                        삭제
-                      </button>
-                    )}
-                  </>
-                )}
-              </div>
-            ))
+                        ✍️ <strong>{commentAuthorName}</strong> | 🗓{" "}
+                        {c.date?.substring(0, 10)}
+                      </div>
+                      <p style={{ marginLeft: "1rem" }}>{c.content}</p>
+
+                      {isMine && (
+                        <div className="comment-actions">
+                          <button
+                            type="button"
+                            className="comment-action-btn save"
+                            onClick={() => handleEditComment(c._id, c.content)}
+                          >
+                            수정
+                          </button>
+                          <button
+                            type="button"
+                            className="comment-action-btn delete"
+                            onClick={() => handleDeleteComment(c._id)}
+                          >
+                            삭제
+                          </button>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </div>
+              );
+            })
           ) : (
             <p style={{ color: "#666" }}>아직 댓글이 없습니다.</p>
           )}
+
 
           {/* 댓글 입력 폼 */}
           <form onSubmit={handleAddComment} className="comment-form">
@@ -214,6 +253,7 @@ export default function PostDetailPage() {
             <button type="submit">댓글 작성</button>
           </form>
         </div>
+
       </div>
     </div>
   );
